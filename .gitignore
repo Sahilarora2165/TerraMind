@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+README.md
+HACKATHON_GUIDE.md
+
+.env.local
