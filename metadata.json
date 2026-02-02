@@ -1,0 +1,8 @@
+
+{
+  "name": "TerraMind Pune",
+  "description": "An AI-powered organic urban farming companion tailored for Pune. Get personalized crop advice, diagnose plant diseases using AI, and connect with local markets.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
