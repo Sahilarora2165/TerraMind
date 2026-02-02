@@ -11,7 +11,7 @@ export const getAgriAdvice = async (space: number, sunlight: string, weather: an
     contents: `As an urban farming expert in Pune, provide advice for a user with ${space} sq ft terrace and ${sunlight} sunlight. 
     Current weather in Pune: ${weather.temp}°C, ${weather.condition}.
     Suggest specific crops, a daily alert, and a water budget in liters.
-    Format the response as JSON with keys: cropSuggestion, alert, waterBudget, reasoning.`,
+    Format the response as JSON with keys: cropSuggestion, alert, waterBudget, reasoning. IMPORTANT: Ensure all string values are in plain text, no markdown formatting.`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -25,15 +25,14 @@ export const getAgriAdvice = async (space: number, sunlight: string, weather: an
       }
     }
   });
-  // Use response.text property directly
   return JSON.parse(response.text || '{}');
 };
 
 export const diagnosePlant = async (base64Image: string, mode: 'Plant Issue' | 'Soil Health'): Promise<Diagnosis> => {
   const ai = getAI();
   const prompt = mode === 'Plant Issue' 
-    ? "Analyze this plant image for pests or diseases. Identify the issue and provide an organic remedy suitable for Pune's climate."
-    : "Analyze the soil in this image. Is it dry, moist, or healthy? Suggest immediate action.";
+    ? "Analyze this plant image for pests or diseases. Identify the issue and provide an organic remedy suitable for Pune's climate. Provide response in plain text only, no markdown."
+    : "Analyze the soil in this image. Is it dry, moist, or healthy? Suggest immediate action. Provide response in plain text only, no markdown.";
 
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -55,7 +54,6 @@ export const diagnosePlant = async (base64Image: string, mode: 'Plant Issue' | '
       }
     }
   });
-  // Use response.text property directly
   return JSON.parse(response.text || '{}');
 };
 
@@ -85,7 +83,8 @@ export const createChatSession = () => {
   return ai.chats.create({
     model: 'gemini-3-flash-preview',
     config: {
-      systemInstruction: 'You are an expert organic urban farming assistant specializing in the Pune region of India. You provide practical, eco-friendly advice for terrace and balcony gardening, considering local seasons (Kharif, Rabi, Summer), Pune weather (mild winters, hot summers, monsoon), water conservation, and organic Maharashtrian agricultural practices. Be warm, encouraging, and highly specific to Pune geography (mentioning areas like Kothrud, Baner, etc., where relevant).',
+      systemInstruction: 'You are an expert organic urban farming assistant specializing in the Pune region of India. You provide practical, eco-friendly advice for terrace and balcony gardening, considering local seasons (Kharif, Rabi, Summer), Pune weather (mild winters, hot summers, monsoon), water conservation, and organic Maharashtrian agricultural practices. Be warm, encouraging, and highly specific to Pune geography (mentioning areas like Kothrud, Baner, etc., where relevant). IMPORTANT: Do NOT use markdown forming. Provide your response in simple plain text only. Do not use bold (asterisks), italics, headers, or bullet points. Use standard paragraph spacing for readability.',
+
     },
   });
 };
@@ -94,7 +93,7 @@ export const generateForumReply = async (question: string): Promise<string> => {
   const ai = getAI();
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Acting as "Pune Agri-Expert", provide a helpful, concise, organic farming reply to this question from a Pune resident: "${question}". Focus on organic methods and local context.`,
+    contents: `Acting as "Pune Agri-Expert", provide a helpful, concise, organic farming reply to this question from a Pune resident: "${question}". Focus on organic methods and local context. IMPORTANT: Provide your response in plain text only, no markdown formatting.`,
   });
   return response.text || "That's a great question! I'll look into local organic solutions for you.";
 };
